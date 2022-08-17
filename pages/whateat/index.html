@@ -1,0 +1,249 @@
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>今天吃啥呀？</title>
+    <link rel="stylesheet" type="text/css" href="eat-min.css">
+    <link rel="stylesheet" href="pop.css">
+    <link rel="shortcut icon" href="favcion.ico" />
+    <style>
+        #d1{
+            width: 400px;
+            height: 300px;
+            z-index: 2;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-left: -200px;
+            margin-top: -150px;
+            overflow: hidden;
+            display: none;
+            background-color: white;
+        }
+        #d2{
+            position: fixed;
+            left: 0;
+            top:0;
+            width: 100%;
+            height: 100%;
+            background-color: grey;
+            z-index: 1;
+            opacity: 0.8;
+            display: none;
+        }
+        #addFood{
+            display: block;
+            width: 90%;
+            height: 30px;
+            margin: 40px auto;
+            border: solid 1px #248CD6;
+            border-radius: 5px;
+            outline: none;
+            padding-left: 5px;
+        }
+        #addFood:focus{
+            border: solid 1px #248CD6;
+            border-radius: 5px;
+            box-shadow: 0 0 8px #248CD6;
+        }
+        .submit{
+            display: flex;
+            width: 90%;
+            height: 40px;
+            margin: 20px auto;
+        }
+        .cancel,.confirm{
+            flex: 1;
+            margin: 2px;
+            border: none;
+            transition: all 0.2s;
+        }
+        .cancel:hover,.confirm:hover{
+            background-color: #248CD6;
+            color: white;
+        }
+        .top{
+            width: 90%;
+            height: 20px;
+            margin: 2px auto;
+        }
+        .top a{
+            float: right;
+            margin-right: 2px;
+            text-decoration: none;
+            color: #3A3C3D;
+            opacity: 0.5;
+        }
+        .top a:hover{
+            opacity: 1;
+        }
+    </style>
+</head>
+<body style="display: block;">
+<div class="logo"><img src="logo.png"></div>
+<div id="wrapper">
+    <h1 style="color:#FF9733" id="what"></h1>
+
+    <input type="button" value="开始" id="start">
+    <br/>
+
+    <div id="d2"></div>
+    <button onclick="chickMe()" id="diyFood">自定义食物</button>
+    <div id="d1">
+        <div class="top">
+            <a href="javascript:void(0)" onclick="cancel()">&#935;</a>
+        </div>
+        <input type="text" placeholder="添加食物" id="addFood">
+        <div id="showAddFood"></div>
+        <div class="submit">
+            <button class="cancel" onclick="add()">添加</button>
+            <button class="cancel" onclick="cancel()">取消</button>
+            <button class="confirm" onclick="confirm()">确定</button>
+        </div>
+    </div>
+
+</div>
+<textarea rows="9" cols="53" id="list" style="display:none">馄饨 拉面 烩面 热干面 刀削面 油泼面 炸酱面 炒面 重庆小面 米线 酸辣粉 土豆粉 螺狮粉 凉皮 麻辣烫 肉夹馍 羊肉汤 炒饭 盖浇饭 卤肉饭 烤肉饭 黄焖鸡米饭 驴肉火烧 川菜 麻辣香锅 火锅 酸菜鱼 烤串 披萨 烤鸭 汉堡 炸鸡 寿司 蟹黄包 粽子 煎饼果子 生煎 炒年糕 盖浇饭 砂锅 大排档 米线 满汉全席 西餐 麻辣烫 自助餐 炒面 快餐 水果 西北风 馄饨 火锅 烧烤 泡面 速冻水饺 日本料理 涮羊肉 味千拉面 肯德基 面包 扬州炒饭 自助餐 茶餐厅 海底捞 咖啡 比萨 麦当劳 兰州拉面 沙县小吃 烤鱼 海鲜 铁板烧 韩国料理 粥 快餐 东南亚菜 甜点 农家菜 川菜 粤菜 湘菜 本帮菜 竹笋烤肉
+</textarea>
+
+
+
+<script src="https://hm.baidu.com/hm.js?7c242ad25d63427a681f4ae84d4ffe19"></script>
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="pop.js"></script>
+<script>
+
+    $(function () {
+        var run = 0,
+            timer;
+
+        $("#start").click(function () {
+            var list = $("#list").val().replace(/ +/g, " ").replace(/^ | $/g, "").split(" ");
+            if (!run) {
+                $(this).val("停止");
+                timer = setInterval(function () {
+                    var r = Math.ceil(Math.random() * list.length),
+                        food = list[r - 1];
+                    $("#what").html(food);
+                    var rTop = Math.ceil(Math.random() * $(document).height()),
+                        rLeft = Math.ceil(Math.random() * ($(document).width() - 50)),
+                        rSize = Math.ceil(Math.random() * (37 - 14) + 14);
+                    $("<span class='temp'></span>").html(food).hide().css({
+                        "top": rTop,
+                        "left": rLeft,
+                        "color": "rgba(0,0,0,." + Math.random() + ")",
+                        "fontSize": rSize + "px"
+                    }).appendTo("body").fadeIn("slow", function () {
+                        $(this).fadeOut("slow", function () {
+                            $(this).remove();
+                        });
+                    });
+                }, 50);
+                run = 1;
+            } else {
+                $(this).val("不行，换一个");
+                clearInterval(timer);
+                run = 0;
+            };
+        });
+
+        document.onkeydown = function enter(e) {
+            var e = e || event;
+            if (e.keyCode == 13){
+                // $("#start").trigger("click");
+                if ($("#addFood").val()!=""){
+                    add();
+                }
+            }
+
+
+
+        };
+    });
+
+    $i = 0;
+    $('#start').click(function(){
+        $i++;
+        if($i >=10 ){
+            $('#start').hide();
+            $('#what').html('这么挑？饿着吧！');
+        }
+    });
+
+    function chickMe() {
+        let d2=document.getElementById("d2");
+        d2.style.display="block";
+        let d1=document.getElementById("d1");
+        d1.style.display="block";
+
+    }
+    function cancel() {
+        let d2=document.getElementById("d2");
+        d2.style.display="none";
+        let d1=document.getElementById("d1");
+        d1.style.display="none";
+        console.log("您点击了取消");
+    }
+    function confirm() {
+        console.log("您点击了确定");
+        console.log($("#showAddFood").html());
+        $("#list").text( $("#showAddFood").html());
+
+        let d2=document.getElementById("d2");
+        d2.style.display="none";
+        let d1=document.getElementById("d1");
+        d1.style.display="none";
+
+    }
+    function add() {
+        console.log("您点击了添加");
+        console.log(  $("#addFood").val() );
+        if ($("#addFood").val()==""){
+            alert("请输入内容");
+            return
+        }
+        $("#showAddFood").append($("#addFood").val()+" ");
+        $("#addFood").val("")
+    }
+
+</script>
+
+<!--pb-->
+<script>
+    document.oncontextmenu = function (event){
+        if(window.event){
+            event = window.event;
+        }try{
+            var the = event.srcElement;
+            if (!((the.tagName == "INPUT" && the.type.toLowerCase() == "text") || the.tagName == "TEXTAREA")){
+                return false;
+            }
+            return true;
+        }catch (e){
+            return false;
+        }
+    }
+</script>
+
+
+<script type="text/javascript">
+    if (self == top) {
+        var theBody = document.getElementsByTagName('body')[0];
+        theBody.style.display = "block";
+    } else {
+        top.location = self.location;
+    }
+</script>
+<!--tj-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?7c242ad25d63427a681f4ae84d4ffe19";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+</body></html>
