@@ -1,0 +1,139 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #e65e6c;
+  display: flex;
+  /* 水平居中 */
+  justify-content: center;
+  /* 垂直居中 */
+  align-items: center;
+}
+.monstertext {
+  color: white;
+  font-size: 18px;
+}
+
+.monstr {
+  height: 100px;
+  width: 100px;
+  background-color: #f06754;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 子元素纵向排列 */
+  flex-direction: column;
+  border-radius: 10px;
+  margin-left: 10px;
+  box-shadow: 0px 10px 10px 0px rgba(110, 110, 110, 0.3);
+  position: relative;
+  animation: jumping 0.8s infinite alternate;
+}
+@keyframes jumping {
+  50% {
+    top: 0px;
+    box-shadow: 0px 10px 10px 0px rgba(110, 110, 110, 0.3);
+  }
+  100% {
+    top: -50px;
+    box-shadow: 0px 120px 10px 0px rgba(110, 110, 110, 0.2);
+  }
+}
+.monstr.blue {
+  background-color: #074177;
+  animation-delay: 0.5s;
+}
+.monstr::after,
+.monstr::before {
+  content: '';
+  height: 10px;
+  width: 20%;
+  background-color: white;
+  display: block;
+  position: absolute;
+  top: -10px;
+  border-radius: 10px;
+}
+.monstr::before {
+  right: 45%;
+  transform: rotate(30deg);
+}
+.monstr::after {
+  left: 45%;
+  transform: rotate(-30deg);
+}
+.monstr .eye {
+  height: 42%;
+  width: 42%;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.monstr .eye .eyeball {
+  height: 50%;
+  width: 50%;
+  border-radius: 50%;
+  background-color: #074177;
+  animation: eyemove 1.6s infinite alternate;
+}
+@keyframes eyemove {
+  0%,
+  10% {
+    transform: translate(-50%);
+  }
+  90%,
+  100% {
+    transform: translate(50%);
+  }
+}
+.monstr .month {
+  height: 10%;
+  width: 30px;
+  margin-top: 10px;
+  border-radius: 3px;
+  background-color: white;
+}
+.monstr.blue .eyeball,
+.monstr.blue .month {
+  background-color: #e55a54;
+}
+.pageloading {
+  height: 100%;
+  width: 100%;
+  background-color: #074177;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: opacity 0.5s;
+}
+.pageloading .loading {
+  margin-top: 50px;
+  background-color: white;
+  height: 8px;
+  width: 200px;
+  border-radius: 5px;
+  display: block;
+  overflow: hidden;
+  transition: 0.5s;
+}
+
+.pageloading .loading .bar {
+  background-color: #db4d6d;
+  height: 100%;
+  width: 0;
+}
+.pageloading.complete {
+  opacity: 0;
+}
+.pageloading.complete .monstr {
+  transform: rotateZ(360deg);
+  transition: 0.5s;
+}
